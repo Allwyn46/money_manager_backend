@@ -28,3 +28,17 @@ class TransactionRead(TransactionBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
+
+
+class CategoryBase(BaseModel):
+    category_name: str
+
+
+class CategoryRead(CategoryBase):
+    
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+
+class CategoryCreate(CategoryBase):
+    """Schema for creating a new transaction (no client-supplied ID)."""

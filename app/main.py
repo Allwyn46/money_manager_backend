@@ -4,8 +4,9 @@ from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app import crud
+from app import categorycrud
 from app.database import Base, engine, get_db
-from app.schemas import TransactionCreate, TransactionRead
+from app.schemas import TransactionCreate, TransactionRead, CategoryRead, CategoryCreate
 
 
 @asynccontextmanager
@@ -60,3 +61,17 @@ async def add_transaction(
 ) -> TransactionRead:
     """Create a new transaction."""
     return await crud.create_transaction(db, transaction)
+
+
+""" CATEGORY ROUTES """
+
+@app.post(
+    "/category",
+    response_model=CategoryRead,
+    status_code=status.HTTP_201_CREATED,
+)
+async def add_category(
+    category: CategoryCreate,
+    db: AsyncSession = Depends(get_db),
+)->CategoryRead:
+    return await categorycrud.create_category(db, category)

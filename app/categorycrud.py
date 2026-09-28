@@ -30,7 +30,7 @@ async def get_categories(
 ) -> list[Category]:
     result = await db.execute(
         select(Category)
-        .order_by(Transaction.date.desc())
+        .order_by(Category.created_at.desc())
         .offset(skip)
         .limit(limit)
     )

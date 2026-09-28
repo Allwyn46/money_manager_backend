@@ -75,3 +75,26 @@ async def add_category(
     db: AsyncSession = Depends(get_db),
 )->CategoryRead:
     return await categorycrud.create_category(db, category)
+
+@app.get("/category", response_model=list[CategoryRead])
+async def list_categories(
+    skip: int = 0,
+    limit: int = 100,
+    db: AsyncSession = Depends(get_db),
+) -> list[CategoryRead]:
+    """List transactions, paginated and ordered by most recent date."""
+    return await categorycrud.get_categories(db, skip=skip, limit=limit)
+
+
+@app.get("/category/{category_id}", response_model=CategoryRead)
+async def get_category(
+    category_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> TransactionRead:
+    """Return a single transaction by ID, or 404 if it doesn't exist."""
+    category = await categorycrud.get_category(db, category_id)
+    if category is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Transaction not found"
+        )
+    return category

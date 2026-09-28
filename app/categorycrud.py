@@ -16,20 +16,20 @@ async def create_category(
     return db_category
 
 
-async def get_transaction(
-    db: AsyncSession, transaction_id: uuid.UUID
-) -> Transaction | None:
+async def get_category(
+    db: AsyncSession, category_id: uuid.UUID
+) -> Category | None:
     result = await db.execute(
-        select(Transaction).where(Transaction.id == transaction_id)
+        select(Category).where(Category.id == category_id)
     )
     return result.scalar_one_or_none()
 
 
-async def get_transactions(
+async def get_categories(
     db: AsyncSession, skip: int = 0, limit: int = 100
-) -> list[Transaction]:
+) -> list[Category]:
     result = await db.execute(
-        select(Transaction)
+        select(Category)
         .order_by(Transaction.date.desc())
         .offset(skip)
         .limit(limit)

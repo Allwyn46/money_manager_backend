@@ -42,3 +42,17 @@ class CategoryRead(CategoryBase):
 
 class CategoryCreate(CategoryBase):
     """Schema for creating a new transaction (no client-supplied ID)."""
+
+
+class AccountBase(BaseModel):
+    account_name: str
+
+
+class AccountRead(AccountBase):
+    
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+
+class AccountCreate(AccountBase):
+    """Schema for creating a new transaction (no client-supplied ID)."""

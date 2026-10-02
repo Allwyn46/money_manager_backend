@@ -44,3 +44,11 @@ class Category(TimestampMixin, Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     category_name: Mapped[str | None] = mapped_column(String(255))
+
+class Account(TimestampMixin, Base):
+    __tablename__ = "accounts"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    account_name: Mapped[str | None] = mapped_column(String(255))

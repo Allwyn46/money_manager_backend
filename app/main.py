@@ -6,8 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 from app import crud
 from app import categorycrud
+from app import accountcrud
 from app.database import Base, engine, get_db
-from app.schemas import TransactionCreate, TransactionRead, CategoryRead, CategoryCreate
+from app.schemas import TransactionCreate, TransactionRead, CategoryRead, CategoryCreate, AccountRead, AccountCreate
 
 
 @asynccontextmanager
@@ -107,6 +108,42 @@ async def get_category(
     category = await categorycrud.get_category(db, category_id)
     if category is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Transaction not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
         )
     return category
+
+
+""" ACCOUNT ROUTES """
+
+@app.post(
+    "/account",
+    response_model=AccountRead,
+    status_code=status.HTTP_201_CREATED,
+)
+async def add_account(
+    account: AccountCreate,
+    db: AsyncSession = Depends(get_db),
+)->AccountRead:
+    return await accountcrud.add_account(db, account)
+
+@app.get("/account",response_model=list[AccountRead])
+async def list_accounts(
+    skip: int = 0,
+    limit: int = 100,
+    db: AsyncSession = Depends(get_db)
+)->list[AccountRead]:
+    return await accountcrud.get_accounts(db,skip=skip,limit=limit)
+
+
+@app.get("/account/{account_id}", response_model=AccountRead)
+async def get_account(
+    account_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> TransactionRead:
+    """Return a single transaction by ID, or 404 if it doesn't exist."""
+    account = await accountcrud.get_account(account_id)
+    if account is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Account not found"
+        )
+    return account

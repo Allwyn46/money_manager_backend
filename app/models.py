@@ -37,6 +37,7 @@ class Transaction(TimestampMixin, Base):
     from_account: Mapped[str | None] = mapped_column(String(255), nullable=True)
     to_account: Mapped[str | None] = mapped_column(String(255), nullable=True)
 
+
 class Category(TimestampMixin, Base):
     __tablename__ = "categories"
 
@@ -45,6 +46,7 @@ class Category(TimestampMixin, Base):
     )
     category_name: Mapped[str | None] = mapped_column(String(255))
 
+
 class Account(TimestampMixin, Base):
     __tablename__ = "accounts"
 
@@ -52,3 +54,16 @@ class Account(TimestampMixin, Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     account_name: Mapped[str | None] = mapped_column(String(255))
+
+
+class Expense(TimestampMixin, Base):
+    __tablename__ = "expenses"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    date: Mapped[py_date] = mapped_column(Date)
+    category: Mapped[str | None] = mapped_column(String(255))
+    amount: Mapped[Decimal | None] = mapped_column(Numeric(12, 2))
+    account: Mapped[str | None] = mapped_column(String(255))
+    note: Mapped[str | None] = mapped_column(String(255))

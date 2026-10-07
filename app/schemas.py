@@ -56,3 +56,20 @@ class AccountRead(AccountBase):
 
 class AccountCreate(AccountBase):
     """Schema for creating a new transaction (no client-supplied ID)."""
+
+
+class ExpenseBase(BaseModel):
+    date: date
+    category: str | None = None
+    amount: Decimal | None = Field(default=None, gt=0)
+    account: str | None = None
+    note: str | None = None
+
+class ExpenseRead(AccountBase):
+    
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+
+class ExpenseCreate(AccountBase):
+    """Schema for creating a new transaction (no client-supplied ID)."""

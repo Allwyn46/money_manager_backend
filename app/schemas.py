@@ -65,11 +65,11 @@ class ExpenseBase(BaseModel):
     account: str | None = None
     note: str | None = None
 
-class ExpenseRead(AccountBase):
+class ExpenseRead(ExpenseBase):
     
     model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID
 
-class ExpenseCreate(AccountBase):
+class ExpenseCreate(ExpenseBase):
     """Schema for creating a new transaction (no client-supplied ID)."""

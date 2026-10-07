@@ -1,3 +1,6 @@
+from app import expensecrud
+from app.schemas import ExpenseCreate
+from app.schemas import ExpenseRead
 import uuid
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -147,3 +150,17 @@ async def get_account(
             status_code=status.HTTP_404_NOT_FOUND, detail="Account not found"
         )
     return account
+
+
+""" EXPENSE ROUTES """
+
+@app.post(
+    "/expense",
+    response_model=ExpenseRead,
+    status_code=status.HTTP_201_CREATED,
+)
+async def add_expense(
+    expense:ExpenseCreate,
+    db: AsyncSession = Depends(get_db),
+)->ExpenseRead:
+    return await expensecrud.add_expense(db, expense)

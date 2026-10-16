@@ -23,14 +23,3 @@ async def add_expense(
     await db.refresh(db_expense)
     await db.refresh(transaction)
     return db_expense
-
-async def get_transactions(
-    db: AsyncSession, skip: int = 0, limit: int = 100
-) -> list[Transaction]:
-    result = await db.execute(
-        select(Transaction)
-        .order_by(Transaction.created_at.desc())
-        .offset(skip)
-        .limit(limit)
-    )
-    return list(result.scalars().all())
